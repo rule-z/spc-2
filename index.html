@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="x-ua-compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Кейс-задание №2</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .counter {
+                display: flex;
+                justify-content: center;
+                min-height: 100vh;
+                padding: 20px;
+                background: linear-gradient(315deg, #1DBFE7 0%, #2761DD 100%);
+            }
+
+            .counter__wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .counter__value {
+                display: block;
+                margin-bottom: 20px;
+                height: 100px;
+                border-radius: 5px;
+                font-size: 50px;
+	            line-height: 100px;
+                color: #ffffff;
+	            text-align: center;
+                outline: none;
+                user-select: none;
+            }
+
+            .counter__value.red {
+                background-color: red;
+            }
+
+            .counter__value.yellow {
+                background-color: yellow;
+                color: #000000;
+            }
+
+            .counter__value.green {
+                background-color: green;
+            }
+
+            .counter__controls {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+
+            .button {
+                display: block;
+                width: 100%;
+                height: 40px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background: linear-gradient(315deg, #e8f8ff 0%, #b8e4f5 100%);
+                font-size: 20px;
+                line-height: 20px;
+                color: #0b3d36;
+                
+                cursor: pointer;
+                outline: none;
+                
+                transition: filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            }
+
+            .button:hover:not(:disabled) {
+                filter: brightness(1.1);
+                box-shadow: 0 3px 12px rgba(29, 191, 231, 0.5);
+            }
+
+            .button:active:not(:disabled) {
+                filter: brightness(0.95);
+                box-shadow: none;
+            }
+
+            .button[disabled] {
+                opacity: 0.2;
+            }
+
+            .counter__notifications {
+                display: block;
+                width: 100%;
+                height: 40px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background: linear-gradient(315deg, #e8f8ff 0%, #b8e4f5 100%);
+                font-size: 20px;
+                line-height: 20px;
+                text-align: center;
+                color: #0b3d36;
+                /*cursor: pointer;*/
+                outline: none;
+                user-select: none;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            .counter__notifications.visible {
+                opacity: 1;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+
+            <div class="counter">
+                <div class="counter__wrapper">
+                    <output id="counter-value" class="counter__value" for="counter-decrement counter-increment" aria-live="polite"></output>
+                    <div class="counter__controls">
+                        <!--<input type="button" id="counter-decrement" class="button counter__controls-decrement" value="-" aria-label="Декремент">-->
+						<button type="button" id="counter-decrement" class="button counter__controls-decrement" aria-label="Декремент">-</button>
+                        <!--<input type="button" id="counter-increment" class="button counter__controls-increment" value="+" aria-label="Инкремент">-->
+						<button type="button" id="counter-increment" class="button counter__controls-increment" aria-label="Инкремент">+</button>
+                    </div>
+                    <p id="counter-notification" class="counter__notifications">Вы достигли экстремального значения</p>
+                </div>
+            </div>
+            
+        </main>
+
+        <script>
+            const counterValueElement = document.getElementById('counter-value');
+            const btnDecrementElement = document.getElementById('counter-decrement');
+            const btnIncrementElement = document.getElementById('counter-increment');
+            const counterNotificationElement = document.getElementById('counter-notification');
+            
+            let counterValue = 0;
+
+            //function setButtonsStates() {
+            //    if (counterValue === 10) {
+            //        btnIncrementElement.setAttribute('disabled', 'true');
+            //    } else if (counterValue < 10 && btnIncrementElement.hasAttribute('disabled')) {
+            //        btnIncrementElement.removeAttribute('disabled');
+            //    } else if (counterValue === -10) {
+            //        btnDecrementElement.setAttribute('disabled', 'true');
+            //    } else if (counterValue > -10 && btnDecrementElement.hasAttribute('disabled')) {
+            //        btnDecrementElement.removeAttribute('disabled');
+            //    }
+            //}
+			
+			function updateUI() {
+				counterValueElement.textContent = String(counterValue);
+				setButtonsStates();
+				setBackgroundStates();
+				setNotificationState();
+			}
+			
+			function setButtonsStates() {
+				if (counterValue === 10) {
+					//btnIncrementElement.setAttribute('disabled', 'true');
+					btnIncrementElement.disabled = true;
+				} else {
+					//btnIncrementElement.removeAttribute('disabled');
+					btnIncrementElement.disabled = false;
+				}
+
+				if (counterValue === -10) {
+					//btnDecrementElement.setAttribute('disabled', 'true');
+					btnDecrementElement.disabled = true;
+				} else {
+					//btnDecrementElement.removeAttribute('disabled');
+					btnDecrementElement.disabled = false;
+				}
+			}
+
+            function resetCounterClasses() {
+                //counterValueElement.setAttribute('class', 'counter__value');
+				counterValueElement.classList.remove('red', 'yellow', 'green');
+            }
+
+            function setBackgroundStates() {
+                if (counterValue === 0) {
+                    resetCounterClasses();
+                    counterValueElement.classList.add('red');
+                } else if (counterValue > 0) {
+                    resetCounterClasses();
+                    counterValueElement.classList.add('yellow');
+                } else {
+                    resetCounterClasses();
+                    counterValueElement.classList.add('green');
+                }
+            }
+
+            function setNotificationState() {
+                if (counterValue === -10 || counterValue === 10) {
+                    counterNotificationElement.classList.add('visible');
+                } else {
+                    counterNotificationElement.classList.remove('visible');
+                }
+            }
+
+            //counterValueElement.textContent = String(counterValue);
+            //setButtonsStates();
+            //setBackgroundStates();
+			//setNotificationState();
+			
+			updateUI();
+
+            btnDecrementElement.addEventListener('click', function decrease() {
+                counterValue -= 1;
+                //counterValueElement.textContent = String(counterValue);
+                //setButtonsStates();
+                //setBackgroundStates();
+                //setNotificationState();
+				updateUI();
+            });
+
+            btnIncrementElement.addEventListener('click', function increase() {
+                counterValue += 1;
+                //counterValueElement.textContent = String(counterValue);
+                //setButtonsStates();
+                //setBackgroundStates();
+                //setNotificationState();
+				updateUI();
+            });
+        </script>
+    </body>
+</html>
