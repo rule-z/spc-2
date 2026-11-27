@@ -112,7 +112,6 @@
                 line-height: 20px;
                 text-align: center;
                 color: #0b3d36;
-                /*cursor: pointer;*/
                 outline: none;
                 user-select: none;
                 opacity: 0;
@@ -131,9 +130,7 @@
                 <div class="counter__wrapper">
                     <output id="counter-value" class="counter__value" for="counter-decrement counter-increment" aria-live="polite"></output>
                     <div class="counter__controls">
-                        <!--<input type="button" id="counter-decrement" class="button counter__controls-decrement" value="-" aria-label="Декремент">-->
 						<button type="button" id="counter-decrement" class="button counter__controls-decrement" aria-label="Декремент">-</button>
-                        <!--<input type="button" id="counter-increment" class="button counter__controls-increment" value="+" aria-label="Инкремент">-->
 						<button type="button" id="counter-increment" class="button counter__controls-increment" aria-label="Инкремент">+</button>
                     </div>
                     <p id="counter-notification" class="counter__notifications">Вы достигли экстремального значения</p>
@@ -150,18 +147,6 @@
             
             let counterValue = 0;
 
-            //function setButtonsStates() {
-            //    if (counterValue === 10) {
-            //        btnIncrementElement.setAttribute('disabled', 'true');
-            //    } else if (counterValue < 10 && btnIncrementElement.hasAttribute('disabled')) {
-            //        btnIncrementElement.removeAttribute('disabled');
-            //    } else if (counterValue === -10) {
-            //        btnDecrementElement.setAttribute('disabled', 'true');
-            //    } else if (counterValue > -10 && btnDecrementElement.hasAttribute('disabled')) {
-            //        btnDecrementElement.removeAttribute('disabled');
-            //    }
-            //}
-			
 			function updateUI() {
 				counterValueElement.textContent = String(counterValue);
 				setButtonsStates();
@@ -171,36 +156,29 @@
 			
 			function setButtonsStates() {
 				if (counterValue === 10) {
-					//btnIncrementElement.setAttribute('disabled', 'true');
 					btnIncrementElement.disabled = true;
 				} else {
-					//btnIncrementElement.removeAttribute('disabled');
 					btnIncrementElement.disabled = false;
 				}
 
 				if (counterValue === -10) {
-					//btnDecrementElement.setAttribute('disabled', 'true');
 					btnDecrementElement.disabled = true;
 				} else {
-					//btnDecrementElement.removeAttribute('disabled');
 					btnDecrementElement.disabled = false;
 				}
 			}
 
             function resetCounterClasses() {
-                //counterValueElement.setAttribute('class', 'counter__value');
 				counterValueElement.classList.remove('red', 'yellow', 'green');
             }
 
             function setBackgroundStates() {
+				resetCounterClasses();
                 if (counterValue === 0) {
-                    resetCounterClasses();
                     counterValueElement.classList.add('red');
                 } else if (counterValue > 0) {
-                    resetCounterClasses();
                     counterValueElement.classList.add('yellow');
                 } else {
-                    resetCounterClasses();
                     counterValueElement.classList.add('green');
                 }
             }
@@ -212,29 +190,16 @@
                     counterNotificationElement.classList.remove('visible');
                 }
             }
-
-            //counterValueElement.textContent = String(counterValue);
-            //setButtonsStates();
-            //setBackgroundStates();
-			//setNotificationState();
 			
 			updateUI();
 
             btnDecrementElement.addEventListener('click', function decrease() {
                 counterValue -= 1;
-                //counterValueElement.textContent = String(counterValue);
-                //setButtonsStates();
-                //setBackgroundStates();
-                //setNotificationState();
 				updateUI();
             });
 
             btnIncrementElement.addEventListener('click', function increase() {
                 counterValue += 1;
-                //counterValueElement.textContent = String(counterValue);
-                //setButtonsStates();
-                //setBackgroundStates();
-                //setNotificationState();
 				updateUI();
             });
         </script>
